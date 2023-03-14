@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "129752351114",
+    "firebase_url": "https://capstone490-b537e-default-rtdb.firebaseio.com",
+    "project_id": "capstone490-b537e",
+    "storage_bucket": "capstone490-b537e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:129752351114:android:e91c81fcf50963eebdc873",
+        "android_client_info": {
+          "package_name": "com.drone.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "129752351114-oep49vqb8b2tke0pq4fielja1nqggbok.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4Ar1DHsg3Irlqo4sE-Nsas3HahfYmfts"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "129752351114-oep49vqb8b2tke0pq4fielja1nqggbok.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

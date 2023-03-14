@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Drone App</string>
+    <string name="resetLink">Reset link send to your email</string>
+    <string name="reset_link_instruction">Enter email to get reset link(make sure email should exist)</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="devices">USB Devices</string>
+</resources>
