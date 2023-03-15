@@ -51,7 +51,42 @@ public class DatabaseHelper {
         });
     }
 
+    public void get_flightRecordings(String id, FlightRHandler handler){
+        database.getReference().child(KEY_FLIGHT).child(id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                FlightRecordings flight = snapshot.getValue(FlightRecordings.class);
+                handler.handle(flight);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
     public void getAllFlights(FlightListHandler handler) {
+        database.getReference().child(KEY_FLIGHT).orderByChild("timestamp").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<FlightModel> flights = new ArrayList<>();
+
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    flights.add(child.getValue(FlightModel.class));
+                }
+                handler.handle(flights);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void getAllFlightsR(FlightListHandler handler) {
         database.getReference().child(KEY_FLIGHT).orderByChild("timestamp").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

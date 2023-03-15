@@ -28,6 +28,8 @@ public class FlightRecordings {
         this.timestamp = time;
     }
 
+    public FlightRecordings(){}
+
     public String getId() {
         return id;
     }
@@ -62,5 +64,41 @@ public class FlightRecordings {
 
     public Long getTimestamp() {
         return timestamp;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setMotor_1_temps(List<Double> motor_1_temps) {
+        this.motor_1_temps = motor_1_temps;
+    }
+
+    public void setMotor_2_temps(List<Double> motor_2_temps) {
+        this.motor_2_temps = motor_2_temps;
+    }
+
+    public void setMotor_3_temps(List<Double> motor_3_temps) {
+        this.motor_3_temps = motor_3_temps;
+    }
+
+    public void setMotor_4_temps(List<Double> motor_4_temps) {
+        this.motor_4_temps = motor_4_temps;
+    }
+
+    public void setHumiditys(List<Double> humiditys) {
+        this.humiditys = humiditys;
+    }
+
+    public void setBattery_temps(List<Double> battery_temps) {
+        this.battery_temps = battery_temps;
+    }
+
+    public void setAltitudes(List<Double> altitudes) {
+        this.altitudes = altitudes;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
     }
 }

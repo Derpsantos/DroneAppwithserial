@@ -399,6 +399,46 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         }
     }
 
+
+    public StringBuffer buffer = new StringBuffer();
+    public void handleBuffer()
+    {
+        int startIndex = this.buffer.indexOf("\n");
+        if (startIndex == -1) {
+            // no data yet
+            return;
+        }
+        int endIndex = this.buffer.indexOf("\n", startIndex + 1);
+        if (endIndex == -1) {
+            // if no message space or newline, can't build full value
+            return;
+        }
+
+        this.handlePart(this.buffer.substring(startIndex + 1, endIndex));
+        this.buffer = new StringBuffer(this.buffer.substring(endIndex));
+
+        handleBuffer();
+    }
+
+    public void handlePart(String part)
+    {
+        String[] fragments = part.split(" ");
+        String key = fragments[0];
+        Double value = Double.parseDouble(fragments[1]);
+
+        switch (key) {
+            default:
+                StringBuilder msg = new StringBuilder();
+                msg.append("Key: ")
+                        .append(key)
+                        .append(" | Value: ")
+                        .append(value)
+                        .append("\n");
+
+                receiveText.append(msg);
+                break;
+        }
+    }
     private void receive(ArrayDeque<byte[]> datas) {
         SpannableStringBuilder spn = new SpannableStringBuilder();
         for (byte[] data : datas) {
@@ -425,7 +465,14 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
             }
         }
         //********************************************************************************************************************
-        //receiveText.append(spn);
+       // receiveText.append(spn);
+
+        this.buffer.append(spn.toString());
+        handleBuffer();
+
+
+
+        /*
         byte[] tag = datas.getFirst();
         String tagstring=tag.toString();
         datas.pop();
@@ -531,7 +578,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                 toast.show();
                 break;
         }
-
+*/
 
     }
 //***********************************************************************************************************************************************************

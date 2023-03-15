@@ -42,17 +42,8 @@ public class DroneConditionFragment extends Fragment {
 
     List<FlightModel> flights;
     DatabaseHelper database;
-    // RecyclerView list;
+    RecyclerView list;
 
-    Button test_button;
-    TextView t3;
-    TextView t4;
-    TextView t6;
-    TextView t7;
-    TextView t8;
-    TextView t9;
-    TextView t10;
-    TextView t11;
 
     Context thiscontext;
     boolean toggle;
@@ -82,17 +73,8 @@ public class DroneConditionFragment extends Fragment {
         thiscontext = container.getContext();
 
 
-        //database.getAllFlights(this::SetupListView);
+       // database.getAllFlights(this::SetupListView);
 
-        test_button = (Button) view.findViewById(R.id.button);
-        t3 = view.findViewById(R.id.textView3);
-        t4 = view.findViewById(R.id.textView4);
-        t6 = view.findViewById(R.id.textView6);
-        t7 = view.findViewById(R.id.textView7);
-        t8 = view.findViewById(R.id.textView8);
-        t9 = view.findViewById(R.id.textView9);
-        t10 = view.findViewById(R.id.textView10);
-        t11= view.findViewById(R.id.textView11);
         return view;
     }
 
@@ -234,9 +216,9 @@ public class DroneConditionFragment extends Fragment {
     }
 */
 
-    /*
+/*
         public void SetupListView(List<FlightModel> flights){
-            list = view.findViewById(R.id.flight_list_id);
+            list = view.findViewById(R.id.recycle_view);
 
             list.setLayoutManager(new LinearLayoutManager(list.getContext()));
 
@@ -259,7 +241,7 @@ public class DroneConditionFragment extends Fragment {
 
            );
         }
-    */
+*/
     private void SetupGraphView(FlightModel flight) {
         double x = 0.0;
         //   GraphView graph = (GraphView) findViewById(R.id.)

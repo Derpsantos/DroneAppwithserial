@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Drone App"
 include ':app'
+

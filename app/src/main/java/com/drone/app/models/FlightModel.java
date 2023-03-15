@@ -37,6 +37,7 @@ public class FlightModel {
         this.longitude=longitude;
         this.timestamp = time;
     }
+public FlightModel(){}
 
     public String getFlightId() {
         return id;
@@ -80,6 +81,50 @@ public class FlightModel {
 
     public long getTimestamp() {
         return timestamp;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setMotor1_temp_max(double motor1_temp_max) {
+        Motor1_temp_max = motor1_temp_max;
+    }
+
+    public void setMotor2_temp_max(double motor2_temp_max) {
+        Motor2_temp_max = motor2_temp_max;
+    }
+
+    public void setMotor3_temp_max(double motor3_temp_max) {
+        Motor3_temp_max = motor3_temp_max;
+    }
+
+    public void setMotor4_temp_max(double motor4_temp_max) {
+        Motor4_temp_max = motor4_temp_max;
+    }
+
+    public void setHumidity_max(double humidity_max) {
+        this.humidity_max = humidity_max;
+    }
+
+    public void setBattery_max(double battery_max) {
+        this.battery_max = battery_max;
+    }
+
+    public void setAltitude(double altitude) {
+        this.altitude = altitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     //@RequiresApi(api = Build.VERSION_CODES.0)
