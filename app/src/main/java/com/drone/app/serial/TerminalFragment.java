@@ -422,22 +422,33 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
 
     public void handlePart(String part)
     {
-        String[] fragments = part.split(" ");
-        String key = fragments[0];
-        Double value = Double.parseDouble(fragments[1]);
+        try {
+            String[] fragments = part.split(" ");
+            String key = fragments[0];
 
-        switch (key) {
-            default:
-                StringBuilder msg = new StringBuilder();
-                msg.append("Key: ")
-                        .append(key)
-                        .append(" | Value: ")
-                        .append(value)
-                        .append("\n");
 
-                receiveText.append(msg);
-                break;
+            switch (key) {
+                /*case "a":
+                    Boolean val = Boolean.parseBoolean(fragments[1]);
+
+                    break;*/
+                default:
+                    Double value = Double.parseDouble(fragments[1]);
+                    StringBuilder msg = new StringBuilder();
+                    msg.append("Key: ")
+                            .append(key)
+                            .append(" | Value: ")
+                            .append(value)
+                            .append("\n");
+
+                    receiveText.append(msg);
+                    break;
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return;
         }
+
     }
     private void receive(ArrayDeque<byte[]> datas) {
         SpannableStringBuilder spn = new SpannableStringBuilder();

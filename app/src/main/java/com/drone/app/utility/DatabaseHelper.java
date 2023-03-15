@@ -51,7 +51,7 @@ public class DatabaseHelper {
         });
     }
 
-    public void get_flightRecordings(String id, FlightRHandler handler){
+   /* public void get_flightRecordings(String id, FlightRHandler handler){
         database.getReference().child(KEY_FLIGHT).child(id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -65,7 +65,7 @@ public class DatabaseHelper {
             }
         });
 
-    }
+    }*/
 
     public void getAllFlights(FlightListHandler handler) {
         database.getReference().child(KEY_FLIGHT).orderByChild("timestamp").addValueEventListener(new ValueEventListener() {
