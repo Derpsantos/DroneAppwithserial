@@ -50,7 +50,7 @@ public class DatabaseHelper {
             }
         });
     }
-
+/*
    /* public void get_flightRecordings(String id, FlightRHandler handler){
         database.getReference().child(KEY_FLIGHT).child(id).addValueEventListener(new ValueEventListener() {
             @Override

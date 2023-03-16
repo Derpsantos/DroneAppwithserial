@@ -163,11 +163,21 @@
         android:layout_height="wrap_content"
         android:text="TextView" />
 
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="52dp" />
+
     <Button
-        android:id="@+id/uploadbutton"
+        android:id="@+id/Stop_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Upload Recent Flight" />
+        android:text="Stop and Upload Data" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="239dp" />
 
 </LinearLayout>
 

@@ -76,7 +76,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private ArrayList<Double> altitudes;
     private ArrayList<Double> latitudes;
     private ArrayList<Double> longitudes;
-    private Button upload;
+    private Button stop;
 
     private ControlLines controlLines;
     private TextUtil.HexWatcher hexWatcher;
@@ -138,9 +138,17 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         else
             getActivity().startService(new Intent(getActivity(), SerialService.class)); // prevents service destroy on unbind from recreated activity caused by orientation change
 
-        upload.setOnClickListener(new View.OnClickListener(){
+
+        stop.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
+                disconnect();
+                Double testval=0.0;
+                motor2_temps.add(testval);
+                motor3_temps.add(testval);
+                motor4_temps.add(testval);
+                latitudes.add(testval);
+                longitudes.add(testval);
                 final String id = UUID.randomUUID().toString();
                 double motor1max=findmax(motor1_temps);
                 double motor2max=findmax(motor2_temps);
@@ -234,7 +242,8 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         humidity=view.findViewById(R.id.ambient_humid_text);
         temperature=view.findViewById(R.id.ambient_temp_text);
         altitude=view.findViewById(R.id.altitude_text);
-        upload=view.findViewById(R.id.uploadbutton);
+
+        stop=view.findViewById(R.id.Stop_button);
 
         sendText = view.findViewById(R.id.send_text);
         hexWatcher = new TextUtil.HexWatcher(sendText);
@@ -426,14 +435,109 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
             String[] fragments = part.split(" ");
             String key = fragments[0];
 
-
+            //Boolean val = Boolean.parseBoolean(fragments[1]);
+            Double value = Double.parseDouble(fragments[1]);
             switch (key) {
                 /*case "a":
-                    Boolean val = Boolean.parseBoolean(fragments[1]);
+
 
                     break;*/
+
+                case "a":
+                    motor1.setText("Motor 1 temperature: " + value +"C");
+                    //above 70 risk, 90 very bad, 100 fucked up
+                    if(value>69 && value<90){
+                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 1 temperature too high, please check motor as soon as possible", Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else if (value>=90 && value < 100) {
+                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 1 temperature is very high, continued operation will cause permanent damage", Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else if (value>=100) {
+                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 1 temperature critical, land drone and perform maintenance immediately", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    motor1_temps.add(value);
+                    break;
+                case "b":
+                    motor2.setText("Motor 2 temperature: " + value +"C");
+                    if(value>69 && value<90){
+                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 2 temperature too high, please check motor as soon as possible", Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else if (value>=90 && value < 100) {
+                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 2 temperature is very high, continued operation will cause permanent damage", Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else if (value>=100) {
+                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 2 temperature critical, land drone and perform maintenance immediately", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    motor2_temps.add(value);
+                    break;
+                case "c":
+                    motor3.setText("Motor 3 temperature: " + value +"C");
+                    if(value>69 && value<90){
+                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 3 temperature too high, please check motor as soon as possible", Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else if (value>=90 && value < 100) {
+                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 3 temperature is very high, continued operation will cause permanent damage", Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else if (value>=100) {
+                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 3 temperature critical, land drone and perform maintenance immediately", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    motor3_temps.add(value);
+                    break;
+                case "d":
+                    motor4.setText("Motor 4 temperature: " + value +"C");
+                    if(value>69 && value<90){
+                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 4 temperature too high, please check motor as soon as possible", Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else if (value>=90 && value < 100) {
+                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 4 temperature is very high, continued operation will cause permanent damage", Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else if (value>=100) {
+                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 4 temperature critical, land drone and perform maintenance immediately", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    motor4_temps.add(value);
+                    break;
+                case "e":
+                    humidity.setText("Ambient Humidity: " + value +"%");
+                    humidities.add(value);
+                    break;
+                case "f":
+                    temperature.setText("Battery temperature: " + value +"C");
+                    if(value<10){
+                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Battery temperature too low, please end operation and check battery", Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else if (value>50) {
+                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Battery temperature too high, please end operation and check battery", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    //below 10 and above 50
+                    battery_temps.add(value);
+                    break;
+                case "g":
+                    altitude.setText("Altitude: " + value +"");
+                    if(value>12000){
+                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Reduce altitude, you are above legal flight limit", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    altitudes.add(value);
+                    break;
+                case"h":
+                    latitudes.add(value);
+                    break;
+                case "i":
+                    longitudes.add(value);
+                    break;
+                case"j":
+                    if(value<1000){
+                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Quadcopter approaching object, please operate with caution", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                    break;
                 default:
-                    Double value = Double.parseDouble(fragments[1]);
+
                     StringBuilder msg = new StringBuilder();
                     msg.append("Key: ")
                             .append(key)
@@ -491,99 +595,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         Double temp = Double.parseDouble(data);
 
         switch (tagstring){
-            case "a":
-                motor1.setText("Motor 1 temperature: " + temp +"C");
-                //above 70 risk, 90 very bad, 100 fucked up
-                if(temp>69 && temp<90){
-                    Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 1 temperature too high, please check motor as soon as possible", Toast.LENGTH_SHORT);
-                    toast.show();
-                } else if (temp>=90 && temp < 100) {
-                    Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 1 temperature is very high, continued operation will cause permanent damage", Toast.LENGTH_SHORT);
-                    toast.show();
-                } else if (temp>=100) {
-                    Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 1 temperature critical, land drone and perform maintenance immediately", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-                motor1_temps.add(temp);
-                break;
-            case "b":
-                motor2.setText("Motor 2 temperature: " + temp +"C");
-                if(temp>69 && temp<90){
-                    Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 2 temperature too high, please check motor as soon as possible", Toast.LENGTH_SHORT);
-                    toast.show();
-                } else if (temp>=90 && temp < 100) {
-                    Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 2 temperature is very high, continued operation will cause permanent damage", Toast.LENGTH_SHORT);
-                    toast.show();
-                } else if (temp>=100) {
-                    Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 2 temperature critical, land drone and perform maintenance immediately", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-                motor2_temps.add(temp);
-                break;
-            case "c":
-                motor3.setText("Motor 3 temperature: " + temp +"C");
-                if(temp>69 && temp<90){
-                    Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 3 temperature too high, please check motor as soon as possible", Toast.LENGTH_SHORT);
-                    toast.show();
-                } else if (temp>=90 && temp < 100) {
-                    Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 3 temperature is very high, continued operation will cause permanent damage", Toast.LENGTH_SHORT);
-                    toast.show();
-                } else if (temp>=100) {
-                    Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 3 temperature critical, land drone and perform maintenance immediately", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-                motor3_temps.add(temp);
-                break;
-            case "d":
-                motor4.setText("Motor 4 temperature: " + temp +"C");
-                if(temp>69 && temp<90){
-                    Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 4 temperature too high, please check motor as soon as possible", Toast.LENGTH_SHORT);
-                    toast.show();
-                } else if (temp>=90 && temp < 100) {
-                    Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 4 temperature is very high, continued operation will cause permanent damage", Toast.LENGTH_SHORT);
-                    toast.show();
-                } else if (temp>=100) {
-                    Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 4 temperature critical, land drone and perform maintenance immediately", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-                motor4_temps.add(temp);
-                break;
-            case "e":
-                humidity.setText("Ambient Humidity: " + temp +"%");
-                humidities.add(temp);
-                break;
-            case "f":
-                temperature.setText("Battery temperature: " + temp +"C");
-                if(temp<10){
-                    Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Battery temperature too low, please end operation and check battery", Toast.LENGTH_SHORT);
-                    toast.show();
-                } else if (temp>50) {
-                    Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Battery temperature too high, please end operation and check battery", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-                //below 10 and above 50
-                battery_temps.add(temp);
-                break;
-            case "g":
-                altitude.setText("Altitude: " + temp +"");
-                if(temp>12000){
-                    Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Reduce altitude, you are above legal flight limit", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-                altitudes.add(temp);
-                break;
-            case"h":
-                latitudes.add(temp);
-                break;
-            case "i":
-                longitudes.add(temp);
-                break;
-            case"j":
-                if(temp<1000){
-                    Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Quadcopter approaching object, please operate with caution", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-                break;
+
             default:
                 Toast toast = Toast.makeText(getActivity().getApplicationContext(),"packet unrecognized:" + tagstring + temp + "" , Toast.LENGTH_SHORT);
                 toast.show();
