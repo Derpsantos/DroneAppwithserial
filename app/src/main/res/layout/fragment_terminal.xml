@@ -125,43 +125,43 @@
         android:id="@+id/motor1text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="Waiting for data..." />
 
     <TextView
         android:id="@+id/motor2text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="Waiting for data.." />
 
     <TextView
         android:id="@+id/motor3text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="Waiting for data..." />
 
     <TextView
         android:id="@+id/motor4text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="Waiting for data..." />
 
     <TextView
         android:id="@+id/ambient_temp_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="Waiting for data..." />
 
     <TextView
         android:id="@+id/ambient_humid_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="Waiting for data..." />
 
     <TextView
         android:id="@+id/altitude_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="Waiting for data..." />
 
     <TextView
         android:id="@+id/textView4"

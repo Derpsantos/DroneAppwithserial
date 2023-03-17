@@ -9,8 +9,69 @@
 
 
     <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
+        android:id="@+id/Motor_1_time"
+        android:layout_width="118dp"
         android:layout_height="wrap_content"
         android:text="Drone setting" />
+
+    <TextView
+        android:id="@+id/Motor_2_time"
+        android:layout_width="119dp"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/Motor_3_time"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/Motor_4_time"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/Battery_time"
+        android:layout_width="122dp"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/m1_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset Motor 1 Usage" />
+
+    <Button
+        android:id="@+id/m2_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset Motor 2 Usage" />
+
+    <Button
+        android:id="@+id/m3_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset Motor 3 Usage" />
+
+    <Button
+        android:id="@+id/m4_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset Motor 4 Usage" />
+
+    <Button
+        android:id="@+id/battery_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset Battery Usage" />
+
+    <Button
+        android:id="@+id/initialize_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Initialize" />
+
 </LinearLayout>

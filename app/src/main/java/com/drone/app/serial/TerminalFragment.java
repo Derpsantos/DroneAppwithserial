@@ -39,6 +39,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.drone.app.R;
+import com.drone.app.models.ComponentUsage;
 import com.drone.app.utility.DatabaseHelper;
 import com.hoho.android.usbserial.driver.SerialTimeoutException;
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
@@ -85,6 +86,14 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private boolean hexEnabled = false;
     private boolean controlLinesEnabled = false;
     private boolean pendingNewline = false;
+    private long start_time;
+    private long stop_time;
+    private long time_dif;
+    private long m1;
+    private long m2;
+    private long m3;
+    private long m4;
+    private long b;
     private String newline = TextUtil.newline_crlf;
     public TerminalFragment() {
         broadcastReceiver = new BroadcastReceiver() {
@@ -143,6 +152,8 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
             @Override
             public void onClick(View view) {
                 disconnect();
+                stop_time=System.currentTimeMillis();
+                time_dif=stop_time-start_time;
                 Double testval=0.0;
                 motor2_temps.add(testval);
                 motor3_temps.add(testval);
@@ -159,9 +170,37 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                 double recentaltitude=altitudes.get(altitudes.size() -1);
                 double recentlatitude=latitudes.get(latitudes.size() -1 );
                 double recentlongitude=longitudes.get(longitudes.size() - 1);
+                database.getcomponentusage(this::update_component_usage);
                 database.add_flight(id, motor1max,motor2max,motor3max,motor4max,humiditymax,batterymax,recentaltitude, recentlatitude, recentlongitude, System.currentTimeMillis());
                 database.add_flight_recordings(id,motor1_temps,motor2_temps, motor3_temps, motor4_temps, humidities, battery_temps, altitudes, System.currentTimeMillis());
                 clear_arrays();
+            }
+
+            private void update_component_usage(ComponentUsage comp) {
+                if(comp != null) {
+                    m1 = comp.getMotor1_time();
+                    m2 = comp.getMotor2_time();
+                    m3 = comp.getMotor3_time();
+                    m4 = comp.getMotor4_time();
+                    b = comp.getBattery_time();
+                    Toast toast = Toast.makeText(getActivity().getApplicationContext(),"" + m1 + " : " + m2 + " : " + " : " + time_dif + "", Toast.LENGTH_SHORT);
+                    toast.show();
+                    m1 += time_dif;
+                    m2 += time_dif;
+                    m3 += time_dif;
+                    m4 += time_dif;
+                    b += time_dif;
+                    Toast toast1 = Toast.makeText(getActivity().getApplicationContext(),"" + m1 + " : " + m2 + " : " + " : " + time_dif + "", Toast.LENGTH_SHORT);
+                    toast1.show();
+                    comp.setMotor1_time(m1);
+                    comp.setMotor2_time(m2);
+                    comp.setMotor3_time(m3);
+                    comp.setMotor4_time(m4);
+                    comp.setBattery_time(b);
+                    long test1 = comp.getMotor1_time();
+                    Toast toast2 = Toast.makeText(getActivity().getApplicationContext(), "" +test1 +"" , Toast.LENGTH_SHORT);
+                    toast2.show();
+                }
             }
         });
     }
@@ -266,6 +305,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        start_time=System.currentTimeMillis();
         int id = item.getItemId();
         if (id == R.id.clear) {
             receiveText.setText("");
@@ -531,7 +571,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                     longitudes.add(value);
                     break;
                 case"j":
-                    if(value<1000){
+                    if(value<100){
                         Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Quadcopter approaching object, please operate with caution", Toast.LENGTH_SHORT);
                         toast.show();
                     }
@@ -778,5 +818,8 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         altitudes=new ArrayList<>();
 
     }
+
+
+
 
 }
