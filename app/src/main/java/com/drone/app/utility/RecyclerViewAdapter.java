@@ -12,19 +12,20 @@ import androidx.annotation.RequiresApi;
 
 import com.drone.app.R;
 import com.drone.app.models.FlightModel;
+import com.drone.app.models.FlightRecordings;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
 
-    private final List<FlightModel> flights;
+    private final List<FlightRecordings> flights;
 
-    public RecyclerViewAdapter(List<FlightModel> flights){
+    public RecyclerViewAdapter(List<FlightRecordings> flights){
         this.flights=flights;
     }
 
-    public FlightModel getFlight(int position){return flights.get(position);}
+    public FlightRecordings getFlight(int position){return flights.get(position);}
 
 
     @NonNull@Override

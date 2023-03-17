@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 import com.drone.app.adapters.FlightHandler;
 import com.drone.app.adapters.FlightListHandler;
+import com.drone.app.adapters.FlightRHandler;
+import com.drone.app.adapters.FlightRListHandler;
 import com.drone.app.models.FlightModel;
 import com.drone.app.models.FlightRecordings;
 import com.google.firebase.database.DataSnapshot;
@@ -37,35 +39,39 @@ public class DatabaseHelper {
     }
 
     public void get_flight(String id, FlightHandler handler) {
-        database.getReference().child(KEY_FLIGHT).child(id).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                FlightModel flight = snapshot.getValue(FlightModel.class);
-                handler.handle(flight);
-            }
+        if(database.getReference().child(KEY_FLIGHT)!=null) {
+            database.getReference().child(KEY_FLIGHT).child(id).addValueEventListener(new ValueEventListener() {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    FlightModel flight = snapshot.getValue(FlightModel.class);
+                    handler.handle(flight);
+                }
 
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
     }
-/*
-   /* public void get_flightRecordings(String id, FlightRHandler handler){
-        database.getReference().child(KEY_FLIGHT).child(id).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                FlightRecordings flight = snapshot.getValue(FlightRecordings.class);
-                handler.handle(flight);
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+    public void get_flightRecordings(String id, FlightRHandler handler){
+        if(database.getReference().child(KEY_FLIGHT_R) !=null) {
+            database.getReference().child(KEY_FLIGHT_R).child(id).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    FlightRecordings flight = snapshot.getValue(FlightRecordings.class);
+                    handler.handle(flight);
+                }
 
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-    }*/
+                }
+            });
+        }
+    }
 
     public void getAllFlights(FlightListHandler handler) {
         database.getReference().child(KEY_FLIGHT).orderByChild("timestamp").addValueEventListener(new ValueEventListener() {
@@ -86,14 +92,14 @@ public class DatabaseHelper {
         });
     }
 
-    public void getAllFlightsR(FlightListHandler handler) {
+    public void getAllFlightsR(FlightRListHandler handler) {
         database.getReference().child(KEY_FLIGHT).orderByChild("timestamp").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<FlightModel> flights = new ArrayList<>();
+                List<FlightRecordings> flights = new ArrayList<>();
 
                 for (DataSnapshot child : snapshot.getChildren()) {
-                    flights.add(child.getValue(FlightModel.class));
+                    flights.add(child.getValue(FlightRecordings.class));
                 }
                 handler.handle(flights);
             }

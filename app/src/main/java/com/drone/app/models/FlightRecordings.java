@@ -1,5 +1,8 @@
 package com.drone.app.models;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 public class FlightRecordings {
@@ -64,6 +67,10 @@ public class FlightRecordings {
 
     public Long getTimestamp() {
         return timestamp;
+    }
+
+    public LocalDateTime getDateTime() {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault());
     }
 
     public void setId(String id) {

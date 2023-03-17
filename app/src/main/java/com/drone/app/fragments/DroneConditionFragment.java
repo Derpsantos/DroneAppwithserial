@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
@@ -25,11 +26,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.drone.app.MainActivity;
 import com.drone.app.R;
+import com.drone.app.adapters.FlightHandler;
 import com.drone.app.adapters.FlightListHandler;
 import com.drone.app.models.FlightModel;
+import com.drone.app.models.FlightRecordings;
 import com.drone.app.utility.DatabaseHelper;
 import com.drone.app.utility.RecyclerItemClickListener;
 import com.drone.app.utility.RecyclerViewAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,12 +49,14 @@ public class DroneConditionFragment extends Fragment {
     View view;
 
     List<FlightModel> flights;
+    List<FlightRecordings> flightsR;
     DatabaseHelper database;
     RecyclerView list;
-
-
+    private FirebaseAuth auth;
+    private FirebaseUser user;
     Context thiscontext;
     boolean toggle;
+
 
     CountDownTimer countDowntimer;
 
@@ -62,6 +72,9 @@ public class DroneConditionFragment extends Fragment {
         Date date = new Date(System.currentTimeMillis());
         Long timestamp = datetoTimestamp(date);
         toggle = true;
+        auth=FirebaseAuth.getInstance();
+        user=auth.getCurrentUser();
+
     }
 
     @Override
@@ -73,7 +86,8 @@ public class DroneConditionFragment extends Fragment {
         thiscontext = container.getContext();
 
 
-        database.getAllFlights(this::SetupListView);
+        database.getAllFlights(this::SetupGraphView);
+        database.getAllFlightsR(this::SetupListView);
 
         return view;
     }
@@ -104,7 +118,7 @@ public class DroneConditionFragment extends Fragment {
 
 
 
-        public void SetupListView(List<FlightModel> flights){
+        public void SetupListView(List<FlightRecordings> flights){
             list = view.findViewById(R.id.recycle_view);
 
             list.setLayoutManager(new LinearLayoutManager(list.getContext()));
@@ -115,11 +129,12 @@ public class DroneConditionFragment extends Fragment {
             new RecyclerItemClickListener(list.getContext(), list, new RecyclerItemClickListener.OnItemClickListener(){
                 @Override
                 public void onItemClick(View view, int position){
-                    RecyclerViewAdapter adapter = (RecyclerViewAdapter) list.getAdapter();
 
-                    database.get_flight(adapter.getFlight(position).getFlightId(), flight ->{
+                    RecyclerViewAdapter adapter = (RecyclerViewAdapter) list.getAdapter();
+                    Log.e("test", "" + adapter.getFlight(position).getId() + "");
+                    /*database.get_flightRecordings(adapter.getFlight(position).getId(), flight ->{
                         SetupGraphView(flight);
-                    } );
+                    } );*/
                 }
 
                 @Override
@@ -129,8 +144,26 @@ public class DroneConditionFragment extends Fragment {
            );
         }
 
-    private void SetupGraphView(FlightModel flight) {
+
+
+    private void SetupGraphView(List<FlightModel> flight) {
         double x = 0.0;
+
+        GraphView graph = (GraphView) view.findViewById(R.id.Drone_graph);
+        graph.removeAllSeries();
+        LineGraphSeries<DataPoint> Motorseries = new LineGraphSeries<>();
+        Motorseries.setColor(Color.RED);
+
+
+        for (int i = 0 ; i < flight.size(); i++){
+            Motorseries.appendData(new DataPoint(x, flight.get(i).getMotor1_temp_max()), true, 500);
+            x+=1;
+        }
+        graph.addSeries(Motorseries);
+
+
+        //Log.e("test", "" + flight.get(0).getFlightId()+ "");
+       // Log.e("test", "" + flight.get(0).getMotor1_temp_max()+ "");
         //   GraphView graph = (GraphView) findViewById(R.id.)
     }
 
