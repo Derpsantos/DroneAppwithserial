@@ -1,6 +1,7 @@
 package com.drone.app.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,10 @@ import androidx.fragment.app.Fragment;
 import com.drone.app.R;
 import com.drone.app.models.ComponentUsage;
 import com.drone.app.utility.DatabaseHelper;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class DroneSettingFragment extends Fragment {
     DatabaseHelper database;
@@ -33,6 +38,14 @@ public class DroneSettingFragment extends Fragment {
     private Button m4reset;
     private Button breset;
     private Button setall;
+
+    //For testing
+    private long m1t;
+    private long m2t;
+    private long m3t;
+    private long m4t;
+    private long bt;
+    private long time_dif;
     View view;
 
     public DroneSettingFragment() {
@@ -53,7 +66,7 @@ database =new DatabaseHelper();
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_setting, container, false);
 
-
+        //database.add_components(UUID.randomUUID().toString(), 180000005, 1800000066,180000005,166666,1456456,System.currentTimeMillis());
         return view;
 
     }
@@ -61,7 +74,6 @@ database =new DatabaseHelper();
     @Override
     public void onStart(){
         super.onStart();
-        //database.initializecomponents(0,0,0,0,0);
         m1=view.findViewById(R.id.Motor_1_time);
         m2=view.findViewById(R.id.Motor_2_time);
         m3=view.findViewById(R.id.Motor_3_time);
@@ -75,50 +87,134 @@ database =new DatabaseHelper();
         setall=view.findViewById(R.id.initialize_button);
         m1reset.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {database.getcomponentusage(this::resetm1);}
-            private void resetm1(ComponentUsage componentUsage) {componentUsage.setMotor1_time(0);}});
+            public void onClick(View v) {
+            time_dif=5;
+            //database.getAllComps(this::update_component_usage);
+                database.getAllComps(this::resetm1);
+
+            }
+
+            private void update_component_usage(List<ComponentUsage> comp) {
+                    if(comp != null) {
+                        String id = UUID.randomUUID().toString();
+                        m1t = comp.get(comp.size()-1).getMotor1_time();
+                        m2t = comp.get(comp.size()-1).getMotor2_time();
+                        m3t = comp.get(comp.size()-1).getMotor3_time();
+                        m4t = comp.get(comp.size()-1).getMotor4_time();
+                        bt = comp.get(comp.size()-1).getBattery_time();
+                        m1t += time_dif;
+                        m2t += time_dif;
+                        m3t += time_dif;
+                        m4t += time_dif;
+                        bt += time_dif;
+                        database.add_components(id, m1t, m2t, m3t, m4t, bt, System.currentTimeMillis());
+                    }
+            }
+            private void resetm1(List<ComponentUsage> comp) {
+                long temp2= comp.get(comp.size()-1).getMotor2_time();
+                long temp3= comp.get(comp.size()-1).getMotor3_time();
+                long temp4= comp.get(comp.size()-1).getMotor4_time();
+                long tempb= comp.get(comp.size()-1).getBattery_time();
+                database.add_components(UUID.randomUUID().toString(),0,temp2, temp3,temp4,tempb, System.currentTimeMillis());
+
+                }
+            //For testing
+
+        });
         m2reset.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {database.getcomponentusage(this::resetm2);}
+            public void onClick(View v) {database.getAllComps(this::resetm2);}
 
-            private void resetm2(ComponentUsage componentUsage) {componentUsage.setMotor2_time(0);}});
+            private void resetm2(List<ComponentUsage> comp) {
+                long temp1= comp.get(comp.size()-1).getMotor1_time();
+                long temp3= comp.get(comp.size()-1).getMotor3_time();
+                long temp4= comp.get(comp.size()-1).getMotor4_time();
+                long tempb= comp.get(comp.size()-1).getBattery_time();
+                database.add_components(UUID.randomUUID().toString(),temp1,0, temp3,temp4,tempb, System.currentTimeMillis());
+            }});
 
         m3reset.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v){database.getcomponentusage(this::resetm3);}
+            public void onClick(View v){database.getAllComps(this::resetm3);}
 
-            private void resetm3(ComponentUsage componentUsage) { componentUsage.setMotor3_time(0);}});
+            private void resetm3(List<ComponentUsage> comp) {
+                long temp1= comp.get(comp.size()-1).getMotor1_time();
+                long temp2= comp.get(comp.size()-1).getMotor2_time();
+                long temp4= comp.get(comp.size()-1).getMotor4_time();
+                long tempb= comp.get(comp.size()-1).getBattery_time();
+                database.add_components(UUID.randomUUID().toString(),temp1,temp2, 0,temp4,tempb, System.currentTimeMillis());
+            }});
 
         m4reset.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v){database.getcomponentusage(this::resetm4);}
+            public void onClick(View v){database.getAllComps(this::resetm4);}
 
-            private void resetm4(ComponentUsage componentUsage) { componentUsage.setMotor4_time(0);}});
+            private void resetm4(List<ComponentUsage> comp) {
+
+                long temp1= comp.get(comp.size()-1).getMotor1_time();
+                long temp2= comp.get(comp.size()-1).getMotor2_time();
+                long temp3= comp.get(comp.size()-1).getMotor3_time();
+                long tempb= comp.get(comp.size()-1).getBattery_time();
+                database.add_components(UUID.randomUUID().toString(),temp1,temp2, temp3,0,tempb, System.currentTimeMillis());
+
+            }});
 
         breset.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v){database.getcomponentusage(this::resetb);}
-            private void resetb(ComponentUsage componentUsage) {componentUsage.setBattery_time(0);}});
+            public void onClick(View v){database.getAllComps(this::resetb);}
+            private void resetb(List<ComponentUsage> comp) {
+
+                long temp1= comp.get(comp.size()-1).getMotor1_time();
+                long temp2= comp.get(comp.size()-1).getMotor2_time();
+                long temp3= comp.get(comp.size()-1).getMotor3_time();
+                long temp4= comp.get(comp.size()-1).getMotor4_time();
+                database.add_components(UUID.randomUUID().toString(),temp1,temp2, temp3,temp4,0, System.currentTimeMillis());
+
+            }});
         setall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                database.initializecomponents(0,0,0,0,0);}
+                database.add_components(UUID.randomUUID().toString(), 0, 0, 0, 0, 0, System.currentTimeMillis());
 
-        });
-        database.getcomponentusage(this::getdata);
-        m1.setText("Motor 1 time used: " + m1time );
-        m2.setText("Motor 2 time used: " + m2time );
-        m3.setText("Motor 3 time used: " + m3time );
-        m4.setText("Motor 4 time used: " + m4time );
-        b.setText("Battery time used: " + btime );
+            }});
+        database.getAllComps(this::getdata);
+
     }
 
-    private void getdata(ComponentUsage comp){
-        m1time=comp.getMotor1_time();
-        m2time=comp.getMotor2_time();
-        m3time=comp.getMotor3_time();
-        m4time=comp.getMotor4_time();
-        btime=comp.getBattery_time();
+    private void getdata(List<ComponentUsage> comp){
+        m1time=comp.get(comp.size()-1).getMotor1_time();
+        m2time=comp.get(comp.size()-1).getMotor2_time();
+        m3time=comp.get(comp.size()-1).getMotor3_time();
+        m4time=comp.get(comp.size()-1).getMotor4_time();
+        btime=comp.get(comp.size()-1).getBattery_time();
+        String t1 = convert_time(m1time);
+        String t2 = convert_time(m2time);
+        String t3 = convert_time(m3time);
+        String t4 = convert_time(m4time);
+        String battery = convert_time(btime);
+
+        m1.setText("Motor 1 time used: " + t1 );
+        if(m1time>180000000){m1.append(" Motor 1 has exceeded recommended usage time, please replace as soon as possible");}
+        m2.setText("Motor 2 time used: " + t2 );
+        if(m2time>180000000){m2.append(" Motor 2 has exceeded recommended usage time, please replace as soon as possible");}
+        m3.setText("Motor 3 time used: " + t3 );
+        if(m3time>180000000){m3.append(" Motor 3 has exceeded recommended usage time, please replace as soon as possible");}
+        m4.setText("Motor 4 time used: " + t4 );
+        if(m4time>180000000){m4.append(" Motor 4 has exceeded recommended usage time, please replace as soon as possible");}
+        b.setText("Battery time used: " + battery );
+        if(btime>180000000){b.append(" Battery has exceeded recommended usage time, please replace as soon as possible");}
     }
+
+    private String convert_time(long time){
+        String s = String.format("%02d:%02d:%02d",
+                TimeUnit.MILLISECONDS.toHours(time),
+                TimeUnit.MILLISECONDS.toMinutes(time) -
+                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(time)),
+                TimeUnit.MILLISECONDS.toSeconds(time) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)));
+        return s;
+    }
+
+
 
 }

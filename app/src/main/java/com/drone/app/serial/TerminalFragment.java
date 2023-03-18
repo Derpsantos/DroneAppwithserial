@@ -51,6 +51,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.UUID;
 
 public class TerminalFragment extends Fragment implements ServiceConnection, SerialListener {
@@ -170,36 +171,26 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                 double recentaltitude=altitudes.get(altitudes.size() -1);
                 double recentlatitude=latitudes.get(latitudes.size() -1 );
                 double recentlongitude=longitudes.get(longitudes.size() - 1);
-                database.getcomponentusage(this::update_component_usage);
+                database.getAllComps(this::update_component_usage);
                 database.add_flight(id, motor1max,motor2max,motor3max,motor4max,humiditymax,batterymax,recentaltitude, recentlatitude, recentlongitude, System.currentTimeMillis());
                 database.add_flight_recordings(id,motor1_temps,motor2_temps, motor3_temps, motor4_temps, humidities, battery_temps, altitudes, System.currentTimeMillis());
                 clear_arrays();
             }
 
-            private void update_component_usage(ComponentUsage comp) {
+            private void update_component_usage(List<ComponentUsage> comp) {
                 if(comp != null) {
-                    m1 = comp.getMotor1_time();
-                    m2 = comp.getMotor2_time();
-                    m3 = comp.getMotor3_time();
-                    m4 = comp.getMotor4_time();
-                    b = comp.getBattery_time();
-                    Toast toast = Toast.makeText(getActivity().getApplicationContext(),"" + m1 + " : " + m2 + " : " + " : " + time_dif + "", Toast.LENGTH_SHORT);
-                    toast.show();
+                    String id = UUID.randomUUID().toString();
+                    m1 = comp.get(comp.size()-1).getMotor1_time();
+                    m2 = comp.get(comp.size()-1).getMotor2_time();
+                    m3 = comp.get(comp.size()-1).getMotor3_time();
+                    m4 = comp.get(comp.size()-1).getMotor4_time();
+                    b = comp.get(comp.size()-1).getBattery_time();
                     m1 += time_dif;
                     m2 += time_dif;
                     m3 += time_dif;
                     m4 += time_dif;
                     b += time_dif;
-                    Toast toast1 = Toast.makeText(getActivity().getApplicationContext(),"" + m1 + " : " + m2 + " : " + " : " + time_dif + "", Toast.LENGTH_SHORT);
-                    toast1.show();
-                    comp.setMotor1_time(m1);
-                    comp.setMotor2_time(m2);
-                    comp.setMotor3_time(m3);
-                    comp.setMotor4_time(m4);
-                    comp.setBattery_time(b);
-                    long test1 = comp.getMotor1_time();
-                    Toast toast2 = Toast.makeText(getActivity().getApplicationContext(), "" +test1 +"" , Toast.LENGTH_SHORT);
-                    toast2.show();
+                    database.add_components(id, m1, m2, m3, m4, b, System.currentTimeMillis());
                 }
             }
         });
@@ -485,7 +476,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
 
                 case "a":
                     motor1.setText("Motor 1 temperature: " + value +"C");
-                    //above 70 risk, 90 very bad, 100 fucked up
+                    //above 70 risk, 90 very bad, 100 urgent issue
                     if(value>69 && value<90){
                         Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Motor 1 temperature too high, please check motor as soon as possible", Toast.LENGTH_SHORT);
                         toast.show();
@@ -576,6 +567,10 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                         toast.show();
                     }
                     break;
+
+                case"z":
+                    Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Emergency: Parachute deployed", Toast.LENGTH_SHORT);
+                    toast.show();
                 default:
 
                     StringBuilder msg = new StringBuilder();

@@ -36,6 +36,8 @@ import com.drone.app.utility.RecyclerViewAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -87,7 +89,7 @@ public class DroneConditionFragment extends Fragment {
 
 
         database.getAllFlights(this::SetupGraphView);
-        database.getAllFlightsR(this::SetupListView);
+        //database.getAllFlightsR(this::SetupListView);
 
         return view;
     }
@@ -117,7 +119,7 @@ public class DroneConditionFragment extends Fragment {
     }
 
 
-
+        /*
         public void SetupListView(List<FlightRecordings> flights){
             list = view.findViewById(R.id.recycle_view);
 
@@ -134,7 +136,7 @@ public class DroneConditionFragment extends Fragment {
                     Log.e("test", "" + adapter.getFlight(position).getId() + "");
                     /*database.get_flightRecordings(adapter.getFlight(position).getId(), flight ->{
                         SetupGraphView(flight);
-                    } );*/
+                    } );
                 }
 
                 @Override
@@ -143,23 +145,116 @@ public class DroneConditionFragment extends Fragment {
 
            );
         }
-
+*/
 
 
     private void SetupGraphView(List<FlightModel> flight) {
-        double x = 0.0;
+        int x = 0;
 
         GraphView graph = (GraphView) view.findViewById(R.id.Drone_graph);
         graph.removeAllSeries();
-        LineGraphSeries<DataPoint> Motorseries = new LineGraphSeries<>();
-        Motorseries.setColor(Color.RED);
 
-
-        for (int i = 0 ; i < flight.size(); i++){
-            Motorseries.appendData(new DataPoint(x, flight.get(i).getMotor1_temp_max()), true, 500);
-            x+=1;
+        LineGraphSeries<DataPoint> Motor1series = new LineGraphSeries<>();
+        Motor1series.setColor(Color.RED);
+        Motor1series.setTitle("Motor 1 temperatures");
+        if(flight.size()<30) {
+            for (int i = flight.size(); i > 0; i--) {
+                Motor1series.appendData(new DataPoint(x, flight.get(flight.size() - i).getMotor1_temp_max()), true, 30);
+                x += 1;
+            }
+            graph.addSeries(Motor1series);
         }
-        graph.addSeries(Motorseries);
+        else{
+            for(int i = 30; i>0; i--){
+                Motor1series.appendData(new DataPoint(x, flight.get(flight.size()-i).getMotor1_temp_max()),true,30);
+                x+=1;
+            }
+
+        }
+
+        //******************************************************************************
+
+        LineGraphSeries<DataPoint> Motor2series = new LineGraphSeries<>();
+        Motor2series.setColor(Color.GREEN);
+        Motor2series.setTitle("Motor 2 temperatures");
+        x=0;
+        if(flight.size()<30) {
+            for (int i = flight.size(); i > 0; i--) {
+                Motor2series.appendData(new DataPoint(x, flight.get(flight.size() - i).getMotor2_temp_max()), true, 30);
+                x += 1;
+            }
+            graph.addSeries(Motor2series);
+        }
+        else{
+            for(int i = 30; i>0; i--){
+                Motor2series.appendData(new DataPoint(x, flight.get(flight.size()-i).getMotor2_temp_max()),true,30);
+                x+=1;
+            }
+        }
+
+        //*************************************************************************************
+        x=0;
+        LineGraphSeries<DataPoint> Motor3series = new LineGraphSeries<>();
+        Motor3series.setColor(Color.BLUE);
+        Motor3series.setTitle("Motor 3 temperatures");
+        if(flight.size()<30) {
+            for (int i = flight.size(); i > 0; i--) {
+                Motor3series.appendData(new DataPoint(x, flight.get(flight.size() - i).getMotor3_temp_max()), true, 30);
+                x += 1;
+            }
+            graph.addSeries(Motor3series);
+        }
+        else{
+            for(int i = 30; i>0; i--){
+                Motor3series.appendData(new DataPoint(x, flight.get(flight.size()-i).getMotor3_temp_max()),true,30);
+                x+=1;
+            }
+        }
+
+        //***********************************************************************************
+    x=0;
+        LineGraphSeries<DataPoint> Motor4series = new LineGraphSeries<>();
+        Motor4series.setColor(Color.YELLOW);
+        Motor4series.setTitle("Motor 4 temperatures");
+        if(flight.size()<30) {
+            for (int i = flight.size(); i > 0; i--) {
+                Motor4series.appendData(new DataPoint(x, flight.get(flight.size() - i).getMotor4_temp_max()), true, 30);
+                x += 1;
+            }
+            graph.addSeries(Motor4series);
+        }
+        else{
+            for(int i = 30; i>0; i--){
+                Motor4series.appendData(new DataPoint(x, flight.get(flight.size()-i).getMotor4_temp_max()),true,30);
+                x+=1;
+            }
+        }
+
+        //********************************************************************************************
+    x=0;
+        LineGraphSeries<DataPoint> Batteryseries = new LineGraphSeries<>();
+        Batteryseries.setColor(Color.BLACK);
+        Batteryseries.setTitle("Battery temperatures");
+        if(flight.size()<30) {
+            for (int i = flight.size(); i > 0; i--) {
+                Batteryseries.appendData(new DataPoint(x, flight.get(flight.size() - i).getBattery_max_max()), true, 30);
+                x += 1;
+            }
+            graph.addSeries(Batteryseries);
+        }
+        else{
+            for(int i = 30; i>0; i--){
+                Batteryseries.appendData(new DataPoint(x, flight.get(flight.size()-i).getBattery_max_max()),true,30);
+                x+=1;
+            }
+        }
+
+        graph.setTitle(" Recent Flights Max Temperatures");
+        graph.getLegendRenderer().setVisible(true);
+        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        GridLabelRenderer gridLabel=graph.getGridLabelRenderer();
+        gridLabel.setHorizontalAxisTitle("Flight number (Oldest to Most Recent, Left to Right)");
+        //gridLabel.setVerticalAxisTitle("Maximum temperature");
 
 
         //Log.e("test", "" + flight.get(0).getFlightId()+ "");

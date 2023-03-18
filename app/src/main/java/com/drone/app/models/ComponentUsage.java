@@ -1,18 +1,22 @@
 package com.drone.app.models;
 
 public class ComponentUsage {
+    private String id;
     private long Motor1_time;
     private long Motor2_time;
     private long Motor3_time;
     private long Motor4_time;
     private long battery_time;
+    private long timestamp;
 
-    public ComponentUsage(long motor1_time, long motor2_time, long motor3_time, long motor4_time, long battery_time) {
-        Motor1_time = motor1_time;
-        Motor2_time = motor2_time;
-        Motor3_time = motor3_time;
-        Motor4_time = motor4_time;
+    public ComponentUsage(String id,long motor1_time, long motor2_time, long motor3_time, long motor4_time, long battery_time, long timestamp) {
+        this.id=id;
+        this.Motor1_time = motor1_time;
+       this.Motor2_time = motor2_time;
+     this.Motor3_time = motor3_time;
+      this.Motor4_time = motor4_time;
         this.battery_time = battery_time;
+        this.timestamp=timestamp;
     }
 
     public ComponentUsage(){}
@@ -22,7 +26,7 @@ public class ComponentUsage {
     }
 
     public void setMotor1_time(long motor1_time) {
-        Motor1_time = motor1_time;
+        this.Motor1_time = motor1_time;
     }
 
     public long getMotor2_time() {
@@ -30,7 +34,7 @@ public class ComponentUsage {
     }
 
     public void setMotor2_time(long motor2_time) {
-        Motor2_time = motor2_time;
+        this.Motor2_time = motor2_time;
     }
 
     public long getMotor3_time() {
@@ -38,7 +42,7 @@ public class ComponentUsage {
     }
 
     public void setMotor3_time(long motor3_time) {
-        Motor3_time = motor3_time;
+       this.Motor3_time = motor3_time;
     }
 
     public long getMotor4_time() {
@@ -46,7 +50,7 @@ public class ComponentUsage {
     }
 
     public void setMotor4_time(long motor4_time) {
-        Motor4_time = motor4_time;
+        this.Motor4_time = motor4_time;
     }
 
     public long getBattery_time() {
@@ -55,5 +59,21 @@ public class ComponentUsage {
 
     public void setBattery_time(long battery_time) {
         this.battery_time = battery_time;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }

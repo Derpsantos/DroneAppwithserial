@@ -10,31 +10,31 @@
 
     <TextView
         android:id="@+id/Motor_1_time"
-        android:layout_width="118dp"
+        android:layout_width="190dp"
         android:layout_height="wrap_content"
         android:text="Drone setting" />
 
     <TextView
         android:id="@+id/Motor_2_time"
-        android:layout_width="119dp"
+        android:layout_width="188dp"
         android:layout_height="wrap_content"
         android:text="TextView" />
 
     <TextView
         android:id="@+id/Motor_3_time"
-        android:layout_width="120dp"
+        android:layout_width="190dp"
         android:layout_height="wrap_content"
         android:text="TextView" />
 
     <TextView
         android:id="@+id/Motor_4_time"
-        android:layout_width="120dp"
+        android:layout_width="188dp"
         android:layout_height="wrap_content"
         android:text="TextView" />
 
     <TextView
         android:id="@+id/Battery_time"
-        android:layout_width="122dp"
+        android:layout_width="185dp"
         android:layout_height="wrap_content"
         android:text="TextView" />
 

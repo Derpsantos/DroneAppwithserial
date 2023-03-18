@@ -5,19 +5,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/ic_controller"
-        android:title="Controller" />
+        android:title=" " />
 
     <item
         android:id="@+id/nav_devices"
-        android:title="Devices" />
+        android:title="Live View" />
     <item
         android:id="@+id/nav_setting"
         android:icon="@drawable/ic_setting"
-        android:title="Settings" />
+        android:title="Component Usage" />
     <item
         android:id="@+id/nav_condition"
         android:icon="@drawable/ic_drone_condition"
-        android:title="Drone Condition" />
+        android:title="History" />
 
     <item
         android:id="@+id/nav_profile"
