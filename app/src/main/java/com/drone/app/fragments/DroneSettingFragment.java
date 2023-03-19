@@ -40,12 +40,7 @@ public class DroneSettingFragment extends Fragment {
     private Button setall;
 
     //For testing
-    private long m1t;
-    private long m2t;
-    private long m3t;
-    private long m4t;
-    private long bt;
-    private long time_dif;
+
     View view;
 
     public DroneSettingFragment() {
@@ -88,28 +83,11 @@ database =new DatabaseHelper();
         m1reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            time_dif=5;
             //database.getAllComps(this::update_component_usage);
                 database.getAllComps(this::resetm1);
 
             }
 
-            private void update_component_usage(List<ComponentUsage> comp) {
-                    if(comp != null) {
-                        String id = UUID.randomUUID().toString();
-                        m1t = comp.get(comp.size()-1).getMotor1_time();
-                        m2t = comp.get(comp.size()-1).getMotor2_time();
-                        m3t = comp.get(comp.size()-1).getMotor3_time();
-                        m4t = comp.get(comp.size()-1).getMotor4_time();
-                        bt = comp.get(comp.size()-1).getBattery_time();
-                        m1t += time_dif;
-                        m2t += time_dif;
-                        m3t += time_dif;
-                        m4t += time_dif;
-                        bt += time_dif;
-                        database.add_components(id, m1t, m2t, m3t, m4t, bt, System.currentTimeMillis());
-                    }
-            }
             private void resetm1(List<ComponentUsage> comp) {
                 long temp2= comp.get(comp.size()-1).getMotor2_time();
                 long temp3= comp.get(comp.size()-1).getMotor3_time();

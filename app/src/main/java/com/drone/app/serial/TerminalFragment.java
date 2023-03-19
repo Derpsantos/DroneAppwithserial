@@ -79,7 +79,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private ArrayList<Double> latitudes;
     private ArrayList<Double> longitudes;
     private Button stop;
-
+    private ArrayList<Long> times;
     private ControlLines controlLines;
     private TextUtil.HexWatcher hexWatcher;
     private Connected connected = Connected.False;
@@ -87,9 +87,6 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private boolean hexEnabled = false;
     private boolean controlLinesEnabled = false;
     private boolean pendingNewline = false;
-    private long start_time;
-    private long stop_time;
-    private long time_dif;
     private long m1;
     private long m2;
     private long m3;
@@ -130,6 +127,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         latitudes=new ArrayList<>();
         longitudes=new ArrayList<>();
         database=new DatabaseHelper();
+        times=new ArrayList<>();
     }
 
     @Override
@@ -142,6 +140,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
 
     @Override
     public void onStart() {
+        times.add(System.currentTimeMillis());
         super.onStart();
         if (service != null)
             service.attach(this);
@@ -153,12 +152,9 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
             @Override
             public void onClick(View view) {
                 disconnect();
-                stop_time=System.currentTimeMillis();
-                time_dif=stop_time-start_time;
+                times.add(System.currentTimeMillis());
+                times.add(times.get(times.size()-1)-times.get(times.size()-2));
                 Double testval=0.0;
-                motor2_temps.add(testval);
-                motor3_temps.add(testval);
-                motor4_temps.add(testval);
                 latitudes.add(testval);
                 longitudes.add(testval);
                 final String id = UUID.randomUUID().toString();
@@ -185,11 +181,11 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                     m3 = comp.get(comp.size()-1).getMotor3_time();
                     m4 = comp.get(comp.size()-1).getMotor4_time();
                     b = comp.get(comp.size()-1).getBattery_time();
-                    m1 += time_dif;
-                    m2 += time_dif;
-                    m3 += time_dif;
-                    m4 += time_dif;
-                    b += time_dif;
+                    m1 += times.get(times.size()-1);
+                    m2 += times.get(times.size()-1);
+                    m3 += times.get(times.size()-1);
+                    m4 += times.get(times.size()-1);
+                    b += times.get(times.size()-1);
                     database.add_components(id, m1, m2, m3, m4, b, System.currentTimeMillis());
                 }
             }
@@ -296,7 +292,7 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        start_time=System.currentTimeMillis();
+
         int id = item.getItemId();
         if (id == R.id.clear) {
             receiveText.setText("");

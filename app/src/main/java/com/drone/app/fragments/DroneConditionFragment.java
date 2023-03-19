@@ -157,8 +157,8 @@ public class DroneConditionFragment extends Fragment {
         LineGraphSeries<DataPoint> Motor1series = new LineGraphSeries<>();
         Motor1series.setColor(Color.RED);
         Motor1series.setTitle("Motor 1 temperatures");
-        if(flight.size()<30) {
-            for (int i = flight.size(); i > 0; i--) {
+        if(flight.size()<100) {
+            for (int i = 10; i > 0; i--) {
                 Motor1series.appendData(new DataPoint(x, flight.get(flight.size() - i).getMotor1_temp_max()), true, 30);
                 x += 1;
             }
@@ -178,8 +178,8 @@ public class DroneConditionFragment extends Fragment {
         Motor2series.setColor(Color.GREEN);
         Motor2series.setTitle("Motor 2 temperatures");
         x=0;
-        if(flight.size()<30) {
-            for (int i = flight.size(); i > 0; i--) {
+        if(flight.size()<100) {
+            for (int i = 10; i > 0; i--) {
                 Motor2series.appendData(new DataPoint(x, flight.get(flight.size() - i).getMotor2_temp_max()), true, 30);
                 x += 1;
             }
@@ -197,8 +197,8 @@ public class DroneConditionFragment extends Fragment {
         LineGraphSeries<DataPoint> Motor3series = new LineGraphSeries<>();
         Motor3series.setColor(Color.BLUE);
         Motor3series.setTitle("Motor 3 temperatures");
-        if(flight.size()<30) {
-            for (int i = flight.size(); i > 0; i--) {
+        if(flight.size()<100) {
+            for (int i = 10; i > 0; i--) {
                 Motor3series.appendData(new DataPoint(x, flight.get(flight.size() - i).getMotor3_temp_max()), true, 30);
                 x += 1;
             }
@@ -216,8 +216,8 @@ public class DroneConditionFragment extends Fragment {
         LineGraphSeries<DataPoint> Motor4series = new LineGraphSeries<>();
         Motor4series.setColor(Color.YELLOW);
         Motor4series.setTitle("Motor 4 temperatures");
-        if(flight.size()<30) {
-            for (int i = flight.size(); i > 0; i--) {
+        if(flight.size()<100) {
+            for (int i = 10; i > 0; i--) {
                 Motor4series.appendData(new DataPoint(x, flight.get(flight.size() - i).getMotor4_temp_max()), true, 30);
                 x += 1;
             }
@@ -235,8 +235,8 @@ public class DroneConditionFragment extends Fragment {
         LineGraphSeries<DataPoint> Batteryseries = new LineGraphSeries<>();
         Batteryseries.setColor(Color.BLACK);
         Batteryseries.setTitle("Battery temperatures");
-        if(flight.size()<30) {
-            for (int i = flight.size(); i > 0; i--) {
+        if(flight.size()<100) {
+            for (int i = 10; i > 0; i--) {
                 Batteryseries.appendData(new DataPoint(x, flight.get(flight.size() - i).getBattery_max_max()), true, 30);
                 x += 1;
             }
