@@ -164,7 +164,7 @@
         android:text="Waiting for data..." />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/GPS_text"
         android:layout_width="match_parent"
         android:layout_height="52dp" />
 
@@ -175,9 +175,19 @@
         android:text="Stop and Upload Data" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/Longitude_text"
         android:layout_width="match_parent"
-        android:layout_height="239dp" />
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/Latitude_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="231dp" />
 
 </LinearLayout>
 

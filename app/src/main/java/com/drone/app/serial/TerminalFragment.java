@@ -40,6 +40,7 @@ import androidx.fragment.app.Fragment;
 
 import com.drone.app.R;
 import com.drone.app.models.ComponentUsage;
+import com.drone.app.models.FlightModel;
 import com.drone.app.utility.DatabaseHelper;
 import com.hoho.android.usbserial.driver.SerialTimeoutException;
 import com.hoho.android.usbserial.driver.UsbSerialDriver;
@@ -69,6 +70,9 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     private TextView humidity;
     private TextView temperature;
     private TextView altitude;
+    private TextView GPStext;
+    private TextView Lat_text;
+    private TextView Long_text;
     private ArrayList<Double> motor1_temps;
     private ArrayList<Double> motor2_temps;
     private ArrayList<Double> motor3_temps;
@@ -141,6 +145,10 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
     @Override
     public void onStart() {
         times.add(System.currentTimeMillis());
+        Double testval=200.0;
+        latitudes.add(testval);
+        longitudes.add(testval);
+        altitudes.add(-1.0);
         super.onStart();
         if (service != null)
             service.attach(this);
@@ -154,9 +162,6 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                 disconnect();
                 times.add(System.currentTimeMillis());
                 times.add(times.get(times.size()-1)-times.get(times.size()-2));
-                Double testval=0.0;
-                latitudes.add(testval);
-                longitudes.add(testval);
                 final String id = UUID.randomUUID().toString();
                 double motor1max=findmax(motor1_temps);
                 double motor2max=findmax(motor2_temps);
@@ -170,7 +175,15 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                 database.getAllComps(this::update_component_usage);
                 database.add_flight(id, motor1max,motor2max,motor3max,motor4max,humiditymax,batterymax,recentaltitude, recentlatitude, recentlongitude, System.currentTimeMillis());
                 database.add_flight_recordings(id,motor1_temps,motor2_temps, motor3_temps, motor4_temps, humidities, battery_temps, altitudes, System.currentTimeMillis());
+                //database.getAllFlights(this::GPS_display);
                 clear_arrays();
+
+            }
+
+            private void GPS_display(List<FlightModel> flightModels) {
+                GPStext.setText("Most recent coordinates: Latitude: " + flightModels.get(flightModels.indexOf(-1)).getLatitude()
+                        + " Longitude: "+flightModels.get(flightModels.indexOf(-1)).getLongitude()
+                        + " Altitude: " + flightModels.get(flightModels.indexOf(-1)).getAltitude_max());
             }
 
             private void update_component_usage(List<ComponentUsage> comp) {
@@ -268,9 +281,10 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
         humidity=view.findViewById(R.id.ambient_humid_text);
         temperature=view.findViewById(R.id.ambient_temp_text);
         altitude=view.findViewById(R.id.altitude_text);
-
+        GPStext=view.findViewById(R.id.GPS_text);
         stop=view.findViewById(R.id.Stop_button);
-
+        Lat_text=view.findViewById(R.id.Latitude_text);
+        Long_text=view.findViewById(R.id.Longitude_text);
         sendText = view.findViewById(R.id.send_text);
         hexWatcher = new TextUtil.HexWatcher(sendText);
         hexWatcher.enable(hexEnabled);
@@ -529,37 +543,44 @@ public class TerminalFragment extends Fragment implements ServiceConnection, Ser
                     break;
                 case "e":
                     humidity.setText("Ambient Humidity: " + value +"%");
+                    if(value>80){
+                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Ambient humidity is high, possible risk of rain, recommend ceasing operation", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
                     humidities.add(value);
                     break;
                 case "f":
-                    temperature.setText("Battery temperature: " + value +"C");
-                    if(value<10){
-                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Battery temperature too low, please end operation and check battery", Toast.LENGTH_SHORT);
+                    temperature.setText("Ambient temperature: " + value +"C");
+                    if(value<-10){
+                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Ambient temperature too low, please end operation and check battery", Toast.LENGTH_SHORT);
                         toast.show();
                     } else if (value>50) {
-                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Battery temperature too high, please end operation and check battery", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Ambient temperature too high, please end operation and check battery", Toast.LENGTH_SHORT);
                         toast.show();
                     }
-                    //below 10 and above 50
+                    //below -10 and above 50
                     battery_temps.add(value);
                     break;
                 case "g":
                     altitude.setText("Altitude: " + value +"");
                     if(value>12000){
-                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Reduce altitude, you are above legal flight limit", Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
+                        GPStext.setText("You are above the legal operating height, please lower your altitude");
+                    } else if (value<16) {
+                        GPStext.setText("You are below the legal height limit, please raise your operating height");
+                    }else{GPStext.setText(" ");}
                     altitudes.add(value);
                     break;
                 case"h":
+                    Lat_text.setText("Latitude: " + value + "");
                     latitudes.add(value);
                     break;
                 case "i":
+                    Long_text.setText("Longitude: " + value + "");
                     longitudes.add(value);
                     break;
                 case"j":
-                    if(value<100){
-                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Quadcopter approaching object, please operate with caution", Toast.LENGTH_SHORT);
+                    if(value<100 && value >1){
+                        Toast toast = Toast.makeText(getActivity().getApplicationContext(),"Quadcopter approaching object," + value + " cm away please operate with caution", Toast.LENGTH_SHORT);
                         toast.show();
                     }
                     break;
